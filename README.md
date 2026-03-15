@@ -2,7 +2,7 @@
 
 > Dive into a procedurally generated, fully dynamic 2D universe rendered in real-time. Explore stars, planets, asteroids, meteors, comets, debris, and cosmic dust with smooth camera controls, collisions, and particle effects.
 
-![JavaScript](https://img.shields.io/badge/JavaScript-ES6-yellow)   ![HTML5](https://img.shields.io/badge/HTML5-orange)   ![CSS3](https://img.shields.io/badge/CSS3-blue)   ![Canvas](https://img.shields.io/badge/Canvas-2D-lightgrey)   ![Noise](https://img.shields.io/badge/Perlin%2FSimplex-Noise-purple)   ![Procedural Generation](https://img.shields.io/badge/Procedural-Generation-green)   ![MIT License](https://img.shields.io/badge/License-MIT-blue)  🚀 
+![JavaScript](https://img.shields.io/badge/JavaScript-ES6-yellow)    ![HTML5](https://img.shields.io/badge/HTML5-orange)    ![CSS3](https://img.shields.io/badge/CSS3-blue)    ![Canvas](https://img.shields.io/badge/Canvas-2D-lightgrey)   ![Noise](https://img.shields.io/badge/Perlin%2FSimplex-Noise-purple)   ![Procedural Generation](https://img.shields.io/badge/Procedural-Generation-green)   ![MIT License](https://img.shields.io/badge/License-MIT-blue)  
 
 
 ---
