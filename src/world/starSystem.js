@@ -10,7 +10,7 @@ export class StarSystem {
             x,
             y,
             z,
-            size: 5 + Math.random() * 3,
+            size: 3 + Math.random() * 2,
             type: starTypes[Math.floor(Math.random() * starTypes.length)],
             seed: Math.random() * Math.PI * 2
         };
