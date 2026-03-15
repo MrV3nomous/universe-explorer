@@ -20,6 +20,16 @@
 
 ---
 
+## 🚀 Try It Now
+
+Experience the **Universe Explorer** directly in your browser!
+
+[![Launch Universe Explorer](https://img.shields.io/badge/Launch-Now-blue?style=for-the-badge&logo=web)](https://mrv3nomous.github.io/universe-explorer/)
+
+> Click the badge above to dive into procedurally generated stars, planets, asteroids, and cosmic effects. Explore sectors, watch particle explosions, and enjoy a fully dynamic space universe in real-time.
+
+---
+
 
 ## ✨ Key Features
 
