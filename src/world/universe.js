@@ -13,7 +13,6 @@ export class Universe {
         const currentSectorX = Math.floor(cameraX / sectorSize);
         const currentSectorY = Math.floor(cameraY / sectorSize);
 
-     
         if (currentSectorX === this.lastCameraSectorX && currentSectorY === this.lastCameraSectorY) return;
         this.lastCameraSectorX = currentSectorX;
         this.lastCameraSectorY = currentSectorY;
@@ -34,7 +33,6 @@ export class Universe {
                     sector.addDebugStar(sx + sectorSize / 2, sy + sectorSize / 2);
                 }
 
-                // Nebulas
                 for (let i = 0; i < Math.floor(Math.random() * 2); i++) {
                     sector.nebulas.push({
                         x: sx + Math.random() * sectorSize,
@@ -48,7 +46,6 @@ export class Universe {
                     });
                 }
 
-                // Asteroids
                 sector.asteroids = [];
                 for (let i = 0; i < Math.floor(Math.random() * 5) + 3; i++) {
                     sector.asteroids.push({
@@ -62,11 +59,11 @@ export class Universe {
                         color: 'gray',
                         vx: (Math.random() - 0.5) * 50,
                         vy: (Math.random() - 0.5) * 50,
-                        trail: []
+                        trail: [],
+                        collided: false
                     });
                 }
 
-                // Debris
                 sector.debris = [];
                 for (let i = 0; i < Math.floor(Math.random() * 8) + 5; i++) {
                     sector.debris.push({
@@ -81,7 +78,6 @@ export class Universe {
                     });
                 }
 
-                // Meteors 
                 sector.meteors = [];
                 if (Math.random() < 0.3) {
                     for (let i = 0; i < 1 + Math.floor(Math.random() * 2); i++) {
@@ -93,12 +89,12 @@ export class Universe {
                             color: 'orange',
                             vx: (Math.random() - 0.5) * 200,
                             vy: (Math.random() - 0.5) * 200,
-                            trail: []
+                            trail: [],
+                            collided: false
                         });
                     }
                 }
 
-                // Comets 
                 sector.comets = [];
                 if (Math.random() < 0.2) {
                     sector.comets.push({
@@ -109,7 +105,8 @@ export class Universe {
                         color: 'lightblue',
                         vx: (Math.random() - 0.5) * 150,
                         vy: (Math.random() - 0.5) * 150,
-                        trail: []
+                        trail: [],
+                        collided: false
                     });
                 }
 
@@ -118,7 +115,6 @@ export class Universe {
         }
     }
 
-    // Aggregators
     getAllStarSystems() { return Array.from(this.sectors.values()).flatMap(s => s.getAllStarSystems()); }
     getAllNebulas() { return Array.from(this.sectors.values()).flatMap(s => s.getAllNebulas()); }
     getAllAsteroids() { return Array.from(this.sectors.values()).flatMap(s => s.asteroids || []); }
@@ -141,10 +137,10 @@ export class Universe {
 
     update(deltaTime) {
         for (const sector of this.sectors.values()) {
-            // Update asteroids & debris 
             for (const a of sector.asteroids || []) {
                 a.x += a.vx * deltaTime;
                 a.y += a.vy * deltaTime;
+                a.angle += a.spinSpeed * deltaTime;
                 if (!a.trail) a.trail = [];
                 a.trail.push({ x: a.x, y: a.y });
                 if (a.trail.length > 10) a.trail.shift();
@@ -157,18 +153,16 @@ export class Universe {
                 if (d.trail.length > 10) d.trail.shift();
             }
 
-            // Update meteors & comets
             const collidables = [...(sector.meteors || []), ...(sector.comets || [])];
             for (const obj of collidables) {
                 obj.x += obj.vx * deltaTime;
                 obj.y += obj.vy * deltaTime;
                 if (!obj.trail) obj.trail = [];
                 obj.trail.push({ x: obj.x, y: obj.y });
-                const maxTrail = obj.color === 'lightblue' ? 20 : 15;
-                if (obj.trail.length > maxTrail) obj.trail.shift();
+                
+                if (obj.trail.length > 60) obj.trail.shift();
             }
 
-            // Collision detection
             for (let i = 0; i < collidables.length; i++) {
                 const a = collidables[i];
                 for (let j = i + 1; j < collidables.length; j++) {
@@ -177,15 +171,11 @@ export class Universe {
                     const dy = a.y - b.y;
                     const dist = Math.sqrt(dx*dx + dy*dy);
                     const minDist = (a.size || 2) + (b.size || 2);
-                    if (dist < minDist && this.particleRenderer) {
-                        this.particleRenderer.spawnExplosion(
-                            (a.x + b.x)/2,
-                            (a.y + b.y)/2,
-                            'orange',
-                            15,
-                            50
-                        );
-                        // Simple bounce
+                    
+                    if (dist < minDist) {
+                        a.collided = true;
+                        b.collided = true;
+
                         const tmpVx = a.vx, tmpVy = a.vy;
                         a.vx = b.vx; a.vy = b.vy;
                         b.vx = tmpVx; b.vy = tmpVy;
@@ -199,7 +189,6 @@ export class Universe {
                 }
             }
 
-            // Update star systems
             for (const s of sector.getAllStarSystems()) s.update(deltaTime);
         }
     }

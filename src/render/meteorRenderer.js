@@ -11,21 +11,19 @@ export class MeteorRenderer {
             const screenX = (m.x - this.camera.x) * this.camera.zoom * parallax + this.camera.width / 2;
             const screenY = (m.y - this.camera.y) * this.camera.zoom * parallax + this.camera.height / 2;
 
-            if (!m.trail) m.trail = [];
-            m.trail.push({ x: m.x, y: m.y });
-            if (m.trail.length > 60) m.trail.shift();
+            if (m.trail) {
+                for (let i = 0; i < m.trail.length; i++) {
+                    const pos = m.trail[i];
+                    const trailX = (pos.x - this.camera.x) * this.camera.zoom * parallax + this.camera.width / 2;
+                    const trailY = (pos.y - this.camera.y) * this.camera.zoom * parallax + this.camera.height / 2;
+                    const alpha = (i / m.trail.length) * 0.6;
+                    const radius = Math.max(0.3, m.size * 0.3);
 
-            for (let i = 0; i < m.trail.length; i++) {
-                const pos = m.trail[i];
-                const trailX = (pos.x - this.camera.x) * this.camera.zoom * parallax + this.camera.width / 2;
-                const trailY = (pos.y - this.camera.y) * this.camera.zoom * parallax + this.camera.height / 2;
-                const alpha = (i / m.trail.length) * 0.6;
-                const radius = Math.max(0.3, m.size * 0.3);
-
-                this.ctx.fillStyle = `rgba(255,200,100,${alpha})`;
-                this.ctx.beginPath();
-                this.ctx.arc(trailX, trailY, radius, 0, Math.PI * 2);
-                this.ctx.fill();
+                    this.ctx.fillStyle = `rgba(255,200,100,${alpha})`;
+                    this.ctx.beginPath();
+                    this.ctx.arc(trailX, trailY, radius, 0, Math.PI * 2);
+                    this.ctx.fill();
+                }
             }
 
             const headSize = Math.max(1, m.size);

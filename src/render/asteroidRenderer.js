@@ -7,8 +7,6 @@ export class AsteroidRenderer {
 
     render(asteroids, deltaTime = 0.016) {
         for (const a of asteroids) {
-            a.angle += a.spinSpeed * deltaTime;
-
             const parallax = Math.max(0.5, 1 / (1 + a.z * 2));
             const screenX = (a.x - this.camera.x) * this.camera.zoom * parallax + this.camera.width / 2;
             const screenY = (a.y - this.camera.y) * this.camera.zoom * parallax + this.camera.height / 2;
